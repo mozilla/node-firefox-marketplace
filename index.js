@@ -14,11 +14,11 @@ var ENDPOINTS = {
   publish: 'app/'
 };
 
-function MarketplaceClient(consumerKey, consumerSecret, environment) {
-  this._consumerKey = consumerKey;
-  this._consumerSecret = consumerSecret;
-  this._environment = environment || 'development';
-  this._baseUrl = URLS[environment];
+function MarketplaceClient(options) {
+  this._consumerKey = options.consumerKey;
+  this._consumerSecret = options.consumerSecret;
+  this._environment = options.environment || 'development';
+  this._baseUrl = URLS[this._environment];
 
   return this;
 }

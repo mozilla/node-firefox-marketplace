@@ -10,21 +10,26 @@ This is a work in progress. The library currently only supports validating a man
 ```javascript
 var MarketplaceClient = require('node-firefox-marketplace');
 
-var fxos = new MarketplaceClient(KEY, SECRET, environment);
+var fxos = new MarketplaceClient(options);
 ```
 
-where `KEY` and `SECRET` are strings that correspond to your Marketplace Developer API key pair. `environment` is also a string, and can be either `development` or `production`. If left blank, the environment will default to 'development'. 
+where `options` is an object consisting of:
+  `consumerKey` (String)
+  `consumerSecret` (String)
+  `environment` (String) can be either `development` or `production`. If left blank, it will default to 'development'
+
+The `consumerKey` and `consumerSecret` properties should correspond to your Marketplace Developer API key pair.
 
 For development, you can generate OAuth keys on the [Beta Firefox Marketplace](https://marketplace-dev.allizom.org/) [here](marketplace-dev.allizom.org/developers/api).
 
-To work with the production [Firefox Marketplace](https://marketplace.firefox.com/), generate your API keys [here](https://marketplace.firefox.com/developers/api). 
+To work with the production [Firefox Marketplace](https://marketplace.firefox.com/), you can generate your API keys [here](https://marketplace.firefox.com/developers/api).
 
 Choose 'command line' for the client type when generating your key.
 
 
 ## Validating a manifest file
 ```javascript
-fxos.validateManifest(manifestUrl).then(function(result) { 
+fxos.validateManifest(manifestUrl).then(function(result) {
   console.log('Result: ', result);
 });
 ```
