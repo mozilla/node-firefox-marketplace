@@ -1,0 +1,25 @@
+{
+  "name": "node-firefox-marketplace",
+  "version": "0.0.1",
+  "description": "Communicate with the Firefox Marketplace API",
+  "main": "index.js",
+  "dependencies": {
+    "request": "^2.53.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mozilla/node-firefox-marketplace.git"
+  },
+  "keywords": [
+    "firefox",
+    "marketplace"
+  ],
+  "author": "Mozilla (https://mozilla.org/)",
+  "contributors": [
+    "Brittany Storoz <bstoroz@mozilla.com>"
+  ],
+  "bugs": {
+    "url": "https://github.com/mozilla/node-firefox-marketplace/issues"
+  },
+  "homepage": "https://github.com/mozilla/node-firefox-marketplace"
+}
