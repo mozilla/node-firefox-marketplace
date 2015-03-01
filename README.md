@@ -20,7 +20,7 @@ where `options` is an object consisting of:
 
 The `consumerKey` and `consumerSecret` properties should correspond to your Marketplace Developer API key pair.
 
-For development, you can generate OAuth keys on the [Beta Firefox Marketplace](https://marketplace-dev.allizom.org/) [here](marketplace-dev.allizom.org/developers/api).
+For development, you can generate OAuth keys on the [Beta Firefox Marketplace](https://marketplace-dev.allizom.org/) [here](https://marketplace-dev.allizom.org/developers/api).
 
 To work with the production [Firefox Marketplace](https://marketplace.firefox.com/), you can generate your API keys [here](https://marketplace.firefox.com/developers/api).
 
