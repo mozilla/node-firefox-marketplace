@@ -1,2 +1,2 @@
-# Marketplace.node
-Communicate with the Firefox Marketplace API in node apps
+# WIP node-firefox-marketplace
+JavaScript library for communicating with the [Firefox Marketplace](https://marketplace.firefox.com/).
