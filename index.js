@@ -5,13 +5,14 @@ var Promise = require('es6-promise').Promise;
  
 
 var URLS = {
-  development: 'https://marketplace-dev.allizom.org/api/v2/apps/',
-  production: 'https://marketplace.firefox.com/api/v2/apps/'
+  development: 'https://marketplace-dev.allizom.org/api/v2/',
+  production: 'https://marketplace.firefox.com/api/v2/'
 }
 
 var ENDPOINTS = {
-  validate: 'validation/',
-  publish: 'app/'
+  accountDetails: 'account/settings/mine/',
+  validate: 'apps/validation/',
+  publish: 'apps/app/'
 };
 
 function MarketplaceClient(options) {
@@ -22,6 +23,25 @@ function MarketplaceClient(options) {
 
   return this;
 }
+
+MarketplaceClient.prototype.getAccountDetails = function() {
+  var self = this;
+  var promise = new Promise(function(resolve, reject) {
+    request({
+      url: self._baseUrl + ENDPOINTS.accountDetails,
+      method: 'GET',
+      oauth: { "consumer_key": self._consumerKey, "consumer_secret": self._consumerSecret },
+    }, function(error, response, body) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(body);
+      }
+    });
+  });
+
+  return promise;
+};
 
 MarketplaceClient.prototype.validateManifest = function(manifestUrl) {
   var self = this;
