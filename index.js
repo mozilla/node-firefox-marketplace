@@ -2,6 +2,7 @@
 
 var request = require('request');
 var Promise = require('es6-promise').Promise;
+var fs      = require('fs');
  
 
 var URLS = {
@@ -57,6 +58,39 @@ MarketplaceClient.prototype.validateManifest = function(manifestUrl) {
         reject(error);
       } else {
         resolve(body.id);
+      }
+    });
+  });
+
+  return promise;
+};
+
+MarketplaceClient.prototype.validatePackage = function(packagePath) {
+  var self = this;
+  var promise = new Promise(function(resolve, reject) {
+    fs.readFile(packagePath, function(error, data) {
+      if(error) {
+        reject(error);
+      } else {
+        
+        request({
+          url: self._baseUrl + ENDPOINTS.validate,
+          method: 'POST',
+          body: { "upload": {
+              "type": "application/zip",
+              "name": packagePath.match(/\/?([^\/]+\.zip)$/)[1],
+              "data": data.toString("base64")
+            }
+          },
+          json: true,
+          oauth: { "consumer_key": self._consumerKey, "consumer_secret": self._consumerSecret },
+        }, function(error, response, body) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(body.id);
+          }
+        });
       }
     });
   });
