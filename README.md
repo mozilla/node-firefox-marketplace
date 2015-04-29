@@ -34,7 +34,29 @@ fxos.validateManifest(manifestUrl).then(function(result) {
 });
 ```
 
-`manifestUrl` is a hosted manifest.webapp URL. (i.e. http://brittanystoroz.github.io/its-five-o-clock-somewhere/manifest.webapp). The promise resolves with a validated manifest ID, that can then be used to publish your application to the marketplace.
+`manifestUrl` is a hosted manifest.webapp URL. (i.e. http://brittanystoroz.github.io/its-five-o-clock-somewhere/manifest.webapp).  The promise resolves with the response body object, which might look something like this:
+
+```javascript
+{ id: '30d2555502e046b4a92b31e8dac233e2',
+  processed: true,
+  valid: true,
+  validation: { 
+    ending_tier: 2,
+    success: false,
+    warnings: 1,
+    feature_profile: [],
+    messages: [ [Object], [Object], [Object], [Object] ],
+    metadata: {},
+    manifest: false,
+    errors: 0,
+    notices: 0,
+    feature_usage: {},
+    permissions: []
+  }
+}
+```
+
+Assuming the manifest is valid, you can then use the `id` property to publish your application to the marketplace.
 
 ## Validating a packaged application
 ```javascript
@@ -43,7 +65,7 @@ fxos.validatePackage(packagePath).then(function(result) {
 });
 ```
 
-`packagePath` is a path to a local webapp package (normally a zip file). The promise resolves with a validatedmanifest ID, which can then be used to publish your application to the marketplace.
+`packagePath` is a path to a local webapp package (normally a zip file). The promise resolves with the same results as documented above in the `validateManifest` method.
 
 ## Publishing an app
 ```javascript
@@ -51,4 +73,4 @@ fxos.publish(validatedManifestID).then(function(result) {
   console.log('Result: ', result);
 });
 ```
-`validatedManifestID` is the ID returned by the `validateManifest` method. The promise resolves with an application ID, and you will see your newly created app under 'My Submissions' in the [Marketplace Developer Hub](https://marketplace.firefox.com/developers/).
+`validatedManifestID` is the `id` property from the object returned by the `validateManifest` method. The promise resolves with an application ID, and you will see your newly created app under 'My Submissions' in the [Marketplace Developer Hub](https://marketplace.firefox.com/developers/).

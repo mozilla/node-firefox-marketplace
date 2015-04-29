@@ -58,7 +58,7 @@ MarketplaceClient.prototype.validateManifest = function(manifestUrl) {
       if (error) {
         reject(error);
       } else {
-        resolve(body.id);
+        resolve(body);
       }
     });
   });
@@ -89,7 +89,7 @@ MarketplaceClient.prototype.validatePackage = function(packagePath) {
           if (error) {
             reject(error);
           } else {
-            resolve(body.id);
+            resolve(body);
           }
         });
       }
