@@ -70,10 +70,9 @@ MarketplaceClient.prototype.validatePackage = function(packagePath) {
   var self = this;
   var promise = new Promise(function(resolve, reject) {
     fs.readFile(packagePath, function(error, data) {
-      if(error) {
+      if (error) {
         reject(error);
       } else {
-        
         request({
           url: self._baseUrl + ENDPOINTS.validate,
           method: 'POST',
