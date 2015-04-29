@@ -36,6 +36,15 @@ fxos.validateManifest(manifestUrl).then(function(result) {
 
 `manifestUrl` is a hosted manifest.webapp URL. (i.e. http://brittanystoroz.github.io/its-five-o-clock-somewhere/manifest.webapp). The promise resolves with a validated manifest ID, that can then be used to publish your application to the marketplace.
 
+## Validating a packaged application
+```javascript
+fxos.validatePackage(packagePath).then(function(result) {
+  console.log('Result: ', result);
+});
+```
+
+`packagePath` is a path to a local webapp package (normally a zip file). The promise resolves with a validatedmanifest ID, which can then be used to publish your application to the marketplace.
+
 ## Publishing an app
 ```javascript
 fxos.publish(validatedManifestID).then(function(result) {
