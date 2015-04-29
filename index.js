@@ -17,9 +17,10 @@ var ENDPOINTS = {
 };
 
 function MarketplaceClient(options) {
-  this._consumerKey = options.consumerKey;
-  this._consumerSecret = options.consumerSecret;
-  this._environment = options.environment || 'development';
+  var opts = options || {};
+  this._consumerKey = opts.consumerKey;
+  this._consumerSecret = opts.consumerSecret;
+  this._environment = opts.environment || 'development';
   this._baseUrl = URLS[this._environment];
 
   return this;
