@@ -12,6 +12,8 @@ var URLS = {
 
 var ENDPOINTS = {
   accountDetails: 'account/settings/mine/',
+  installedApps: 'account/installed/mine/',
+  permissions: 'account/permissions/mine/',
   validate: 'apps/validation/',
   publish: 'apps/app/'
 };
@@ -31,6 +33,44 @@ MarketplaceClient.prototype.getAccountDetails = function() {
   var promise = new Promise(function(resolve, reject) {
     request({
       url: self._baseUrl + ENDPOINTS.accountDetails,
+      method: 'GET',
+      oauth: { "consumer_key": self._consumerKey, "consumer_secret": self._consumerSecret },
+    }, function(error, response, body) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(body);
+      }
+    });
+  });
+
+  return promise;
+};
+
+MarketplaceClient.prototype.getInstalledApps = function() {
+  var self = this;
+  var promise = new Promise(function(resolve, reject) {
+    request({
+      url: self._baseUrl + ENDPOINTS.installedApps,
+      method: 'GET',
+      oauth: { "consumer_key": self._consumerKey, "consumer_secret": self._consumerSecret },
+    }, function(error, response, body) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(body);
+      }
+    });
+  });
+
+  return promise;
+};
+
+MarketplaceClient.prototype.getAccountPermissions = function() {
+  var self = this;
+  var promise = new Promise(function(resolve, reject) {
+    request({
+      url: self._baseUrl + ENDPOINTS.permissions,
       method: 'GET',
       oauth: { "consumer_key": self._consumerKey, "consumer_secret": self._consumerSecret },
     }, function(error, response, body) {
