@@ -3,7 +3,7 @@
 var request = require('request');
 var Promise = require('es6-promise').Promise;
 var fs      = require('fs');
- 
+
 
 var URLS = {
   development: 'https://marketplace-dev.allizom.org/api/v2/',
@@ -99,22 +99,30 @@ MarketplaceClient.prototype.validatePackage = function(packagePath) {
 };
 
 MarketplaceClient.prototype.publish = function(validationId, type) {
-  type = type || "manifest";
+  if (type === null) {
+    type = "manifest";
+  } else if(type === "packaged") {
+    type = "upload";
+  }
+
   var self = this;
+  var body = {}
+  body[type] = validationId;
+  
   var promise = new Promise(function(resolve, reject) {
     request({
-      url: self._baseUrl + ENDPOINTS.publish + "?" + type + "=" + validatedManifestId,
+      url: self._baseUrl + ENDPOINTS.publish,
       method: 'POST',
-      body: { "manifest": validatedManifestId },
+      body: body,
       json: true,
       oauth: { "consumer_key": self._consumerKey, "consumer_secret": self._consumerSecret },
     }, function(error, response, body) {
       if (error) {
         reject(error);
       } else {
-        resolve(body.id);
+        resolve(body);
       }
-    });  
+    });
   });
 
   return promise;
