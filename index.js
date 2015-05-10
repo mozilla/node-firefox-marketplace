@@ -98,11 +98,12 @@ MarketplaceClient.prototype.validatePackage = function(packagePath) {
   return promise;
 };
 
-MarketplaceClient.prototype.publish = function(validatedManifestId) {
+MarketplaceClient.prototype.publish = function(validationId, type) {
+  type = type || "manifest";
   var self = this;
   var promise = new Promise(function(resolve, reject) {
     request({
-      url: self._baseUrl + ENDPOINTS.publish + "?manifest=" + validatedManifestId,
+      url: self._baseUrl + ENDPOINTS.publish + "?" + type + "=" + validatedManifestId,
       method: 'POST',
       body: { "manifest": validatedManifestId },
       json: true,
