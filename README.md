@@ -69,8 +69,8 @@ fxos.validatePackage(packagePath).then(function(result) {
 
 ## Publishing an app
 ```javascript
-fxos.publish(validatedManifestID).then(function(result) {
+fxos.publish(validationId, format).then(function(result) {
   console.log('Result: ', result);
 });
 ```
-`validatedManifestID` is the `id` property from the object returned by the `validateManifest` method. The promise resolves with an application ID, and you will see your newly created app under 'My Submissions' in the [Marketplace Developer Hub](https://marketplace.firefox.com/developers/).
+`validationId` is the `id` property from the object returned by the `validateManifest` or `validatePackage` method. The `format` is needed, if you are publishing a packaged app and has to hold the value `"packaged"`, when publishing a validated manifest the value doesn't matter. The promise resolves with an application object, and you will see your newly created app under 'My Submissions' in the [Marketplace Developer Hub](https://marketplace.firefox.com/developers/).
