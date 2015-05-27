@@ -98,16 +98,12 @@ MarketplaceClient.prototype.validatePackage = function(packagePath) {
   return promise;
 };
 
-MarketplaceClient.prototype.publish = function(validationId, type) {
-  if (type === null) {
-    type = "manifest";
-  } else if(type === "packaged") {
-    type = "upload";
-  }
-
+MarketplaceClient.prototype.publish = function(validationId, format) {
   var self = this;
   var body = {}
-  body[type] = validationId;
+
+  var publishType = (format === "packaged") ? "upload" : "manifest";
+  body[publishType] = validationId;
   
   var promise = new Promise(function(resolve, reject) {
     request({
