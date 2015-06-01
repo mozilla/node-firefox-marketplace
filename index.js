@@ -66,6 +66,26 @@ MarketplaceClient.prototype.validateManifest = function(manifestUrl) {
   return promise;
 };
 
+MarketplaceClient.prototype.getValidation = function(validationId) {
+  var self = this;
+  var promise = new Promise(function(resolve, reject) {
+    request({
+      url: self._baseUrl + ENDPOINTS.validate + validationId,
+      method: 'GET',
+      json: true,
+      oauth: { "consumer_key": self._consumerKey, "consumer_secret": self._consumerSecret },
+    }, function(error, response, body) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(body);
+      }
+    });
+  });
+
+  return promise;
+};
+
 MarketplaceClient.prototype.validatePackage = function(packagePath) {
   var self = this;
   var promise = new Promise(function(resolve, reject) {
@@ -87,6 +107,22 @@ MarketplaceClient.prototype.validatePackage = function(packagePath) {
         }, function(error, response, body) {
           if (error) {
             reject(error);
+          } else if (response.statusCode == 202) {
+            // Checks the validation's status every five seconds, if it's not yet processed
+            var poller = function() {
+              setTimeout(function() {
+                self.getValidation(body.id).then(function(validation) {
+                  if (validation.processed) {
+                    resolve(validation);
+                  } else {
+                    poller();
+                  }
+                }, function() {
+                  poller();
+                });
+              }, 5000);
+            };
+            poller();
           } else {
             resolve(body);
           }
