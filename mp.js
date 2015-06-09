@@ -57,8 +57,6 @@ MarketplaceClient.prototype.MPRequest = function(methodName, data, endpointId) {
   if (endpointId) {
     urlEndpoint = urlEndpoint + endpointId + '/';
   }
-  console.log("URL ENDPOINT: ", urlEndpoint);
-  console.log("Request Details: ", requestDetails);
   return new Promise(function(resolve, reject) {
     request({
       url: urlEndpoint,
@@ -67,13 +65,10 @@ MarketplaceClient.prototype.MPRequest = function(methodName, data, endpointId) {
       body: data,
       oauth: { "consumer_key": self._consumerKey, "consumer_secret": self._consumerSecret },
     }, function(error, response, body) {
-      console.log("STATUS CODE: ", response.statusCode);
       if (error) {
-        console.log("ERROR: ", response);
         reject(error);
       }
       if (requestDetails.successfulStatusCodes.indexOf(response.statusCode) === -1) {
-        console.log("YEP STATUS CODE");
         reject(body);
       } else {
         resolve(body);
