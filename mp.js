@@ -13,31 +13,8 @@ var URLS = {
 var ENDPOINTS = {
   accountDetails: 'account/settings/mine/',
   validate: 'apps/validation/',
-  publish: 'apps/app/'
-};
-
-var CLIENTMETHODS = {
-  validate: {
-    endpoint: 'apps/validation/',
-    requestMethod: 'POST',
-    oauth: true,
-    json: true,
-    successfulStatusCodes: [201, 202]
-  },
-  publish: {
-    endpoint: 'apps/app/',
-    requestMethod: 'POST',
-    oauth: true,
-    json: true,
-    successfulStatusCodes: [201]
-  },
-  update: {
-    endpoint: 'apps/app/',
-    requestMethod: 'PUT',
-    oauth: true,
-    json: true,
-    successfulStatusCodes: [202]
-  }
+  publish: 'apps/app/',
+  update: 'apps/app/'
 };
 
 function MarketplaceClient(options) {
@@ -50,47 +27,60 @@ function MarketplaceClient(options) {
   return this;
 }
 
-MarketplaceClient.prototype.MPRequest = function(methodName, data, endpointId) {
-  var self = this;
-  var requestDetails = CLIENTMETHODS[methodName];
-  var urlEndpoint = self._baseUrl + requestDetails.endpoint;
-  if (endpointId) {
-    urlEndpoint = urlEndpoint + endpointId + '/';
-  }
-  return new Promise(function(resolve, reject) {
-    request({
-      url: urlEndpoint,
-      method: requestDetails.requestMethod,
-      json: true,
-      body: data,
-      oauth: { "consumer_key": self._consumerKey, "consumer_secret": self._consumerSecret },
-    }, function(error, response, body) {
-      if (error) {
-        reject(error);
-      }
-      if (requestDetails.successfulStatusCodes.indexOf(response.statusCode) === -1) {
-        reject(body);
-      } else {
-        resolve(body);
-      }
+MarketplaceClient.prototype = {
+  _getRequest: function(opts) {
+    var promise = new Promise(function(resolve, reject) {
+      request({
+        url: opts.url,
+        method: opts.method,
+        oauth: opts.oauth || false,
+        json: opts.json || true,
+        body: opts.body || false
+      }, function(error, response, body) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(body);
+        }
+      });
     });
-  });
-};
+ 
+    return promise;
+  },
 
-MarketplaceClient.prototype.validate = function(validationResource) {
-  return this.MPRequest('validate', { manifest: validationResource });
-};
+  validate: function(validationResource) {
+    this._getRequest({
+      url: this._baseUrl + ENDPOINTS.validate,
+      method: 'POST',
+      json: true,
+      oauth: { "consumer_key": this._consumerKey, "consumer_secret": this._consumerSecret },
+      body: requestData
+    });
+  },
 
-MarketplaceClient.prototype.publish = function(validationId, format) {
-  var body = {}
-  var publishType = (format === "packaged") ? "upload" : "manifest";
-  body[publishType] = validationId;
+  publish: function(validationId, format) {
+    var requestData = {}
+    var publishType = (format === "packaged") ? "upload" : "manifest";
+    requestData[publishType] = validationId;
 
-  return this.MPRequest('publish', body);
-};
+    this._getRequest({
+      url: this._baseUrl + ENDPOINTS.publish,
+      method: 'POST',
+      json: true,
+      oauth: { "consumer_key": this._consumerKey, "consumer_secret": this._consumerSecret },
+      body: requestData
+    });
+  },
 
-MarketplaceClient.prototype.update = function(appId, appData) {
-  return this.MPRequest('update', appData, appId);
+  update: function(appId, requestData) {
+    this._getRequest({
+      url: this._baseUrl + ENDPOINTS.update + appId,
+      method: 'PUT',
+      json: true,
+      oauth: { "consumer_key": this._consumerKey, "consumer_secret": this._consumerSecret },
+      body: requestData
+    });
+  }
 };
 
 module.exports = MarketplaceClient;
